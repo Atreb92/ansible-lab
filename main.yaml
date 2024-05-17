@@ -1,0 +1,13 @@
+- name: Setup Parrot VM
+  hosts: parrot
+  vars_files:
+      - 'vars/vault.yaml'
+      - 'vars/variables.yaml'
+
+  roles:
+    - role: software-install
+    - role: software-config
+    #- role: kali-burpsuite
+    #- role: kali-pulsevpn
+    #- role: kali-certificate 
+    #- role: kali-browser

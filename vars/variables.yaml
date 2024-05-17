@@ -1,0 +1,57 @@
+apt_software:
+  - ffuf
+  - ncdu
+  - adb
+  - fastboot
+  - tldr
+  - neovim
+  - vim
+  - kitty
+  - terminator
+  - seclists
+  - nala
+  - btop
+  - gobuster
+  - flatpak
+  - jadx
+  - apt-transport-https
+  - i3
+  - i3status
+  - rofi
+  - zsh
+  - gocryptfs
+  - apktool
+  - apksigner
+  - wget
+  - flameshot
+  - mitmproxy
+  - jq
+  - feh
+
+flatpak_software:
+  - {"name": "postman", "flatpak": "com.getpostman.Postman"}
+  - {"name": "flatseal", "flatpak": "com.github.tchx84.Flatseal"}
+  - {"name": "soapui", "flatpak": "org.soapui.SoapUI"}
+  - {"name": "microsoft-edge", "flatpak": "com.microsoft.Edge"}
+  - {"name": "google-chrome", "flatpak": "com.google.Chrome"}
+  - {"name": "guiscrcpy", "flatpak": "in.srev.guiscrcpy"}
+  - {"name": "megasync", "flatpak": "nz.mega.MEGAsync"}
+
+
+fonts:
+  - {"name": "CaskadiaMono", "src": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip"}
+  - {"name": "CaskadiaCove", "src": "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip"}
+
+firefox_plugins:
+  - "foxyproxy-standard"
+  - "multi-account-containers"
+  - "url-to-qrcode"
+  - "cookie-editor"
+  - "user-agent-string-switcher"
+  - "clearcache"
+  - "darkreader"
+  - "wappalyzer"
+  - "i-dont-care-about-cookies"
+
+firefox_bookmarks:
+  - {"title": "Shell Generator", "url": "https://www.revshells.com/", "placement": "toolbar", "folder": "Tools"}

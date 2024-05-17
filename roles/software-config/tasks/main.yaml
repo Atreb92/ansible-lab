@@ -1,0 +1,32 @@
+- name: "Updating Firefox Policies"
+  template: 
+    src: "templates/firefox-policies.json.j2"
+    dest: "/usr/share/firefox-esr/distribution/policies.json"
+  become: true
+
+- name: change users shell to zsh 
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+
+# - name: Configuring MegaSync
+#   block:
+#     - name: Creating sync dir
+#       file:
+#         path: "/home/{{ ansible_user_id }}/MEGA"
+#         state: directory
+#     - name: Creating configuration dir
+#       file:
+#         path: "/home/{{ ansible_user_id }}/.var/app/nz.mega.MEGAsync/data/data/Mega Limited/MEGAsync"
+#         state: directory
+#     - name: Copying config file
+#       copy:
+#         decrypt: true
+#         mode: '0640'
+#         force: true
+#         owner: "{{ ansible_user_id }}"
+#         group: "{{ ansible_user_id }}"
+#         src: files/MEGAsync.cfg
+#         dest: "/home/{{ ansible_user_id }}/.var/app/nz.mega.MEGAsync/data/data/Mega Limited/MEGAsync/MEGAsync.cfg"
+

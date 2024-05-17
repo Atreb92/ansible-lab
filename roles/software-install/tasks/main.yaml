@@ -1,0 +1,104 @@
+- name: installing packages with apt
+  become: true
+  apt:
+    state: present
+    update_cache: true
+    name: "{{ apt_software }}"
+
+- name: Adding flathub repository to flatpak
+  flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    method: user
+    state: present
+
+- name: Installing software with flatpak
+  flatpak:
+    state: present
+    remote: flathub
+    method: user
+    name: "{{ item.flatpak }}"
+  with_items:
+    - "{{ flatpak_software }}"
+
+- name: Enabling flatpak to access system themes & icons
+  shell: "{{ item }}"
+  with_items:
+    - "flatpak --user override --filesystem=/home/$USER/.icons/:ro"
+
+- name: Updating XDG_DATA_DIRS variable for flatpak
+  lineinfile:
+    state: present
+    insertafter: EOF
+    line: 'export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/{{ ansible_user_id }}/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"'
+    path: '/home/{{ ansible_user_id }}/.profile'
+  
+# # Not a clean solution; open to suggestions
+# - name: creating alias for flatpak apps (bashrc)
+#   lineinfile:
+#     state: present
+#     line: "alias {{item.name}}='flatpak run {{item.flatpak}}'"
+#     path: "/home/{{ ansible_user_id }}/.bashrc"
+#   with_items: "{{flatpak_software}}"
+
+# - name: creating alias for flatpak apps (zshrc)
+#   lineinfile:
+#     state: present
+#     line: "alias {{item.name}}='flatpak run {{item.flatpak}}'"
+#     path: "/home/{{ ansible_user_id }}/.zshrc"
+#   with_items: "{{flatpak_software}}"
+
+- name: Creating fonts dir
+  file:
+    path: "/home/{{ ansible_user_id }}/.fonts/{{ item.name }}"
+    state: directory
+  with_items:
+    - "{{ fonts }}"
+
+- name: Installing fonts
+  unarchive:
+    src: "{{ item.src }}"
+    creates: "/home/{{ ansible_user_id }}/.fonts/{{ item.name }}/{{ item.name }}Font-Regular.ttf"
+    dest: "/home/{{ ansible_user_id }}/.fonts/{{ item.name }}"
+    remote_src: yes
+  with_items:
+    - "{{ fonts }}"
+
+- name: Check if Future-cursors is installed
+  stat:
+    path: "/home/{{ ansible_user_id }}/.icons/Future-cursors/index.theme"
+  register: future_cursors_results
+
+- name: Installing Future-cursors
+  block:
+    - name: Creating icons dir
+      file:
+        path: "/home/{{ ansible_user_id }}/.icons/Future-cursors"
+        state: directory
+    - name: Fetching git repository
+      git:
+        repo: "https://github.com/yeyushengfan258/Future-cursors.git"
+        dest: "/tmp/Future-cursors"
+        update: no
+    - name: Installing icons
+      copy:
+        src: "/tmp/Future-cursors/dist/"
+        dest: "/home/{{ ansible_user_id }}/.icons/Future-cursors/"
+        remote_src: true
+  when: not future_cursors_results.stat.exists
+
+- name: Check if dotefiles are installed
+  stat:
+    path: "/home/{{ ansible_user_id }}/.dotfiles"
+  register: dotfiles_result
+
+- name: Installing dotfiles
+  block:
+    - name: Cloning repository
+      git:
+        repo: "https://github.com/Atreb92/.dotfiles.git"
+        dest: "/home/{{ ansible_user_id }}/.dotfiles"
+        update: no
+    - name: Running init script
+      shell: "/home/{{ ansible_user_id }}/.dotfiles/scripts/init_dotfiles.sh"
+  when: not dotfiles_result.stat.exists

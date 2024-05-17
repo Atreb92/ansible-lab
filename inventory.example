@@ -1,0 +1,2 @@
+[parrot]
+<ip> ansible_user=<user> ansible_become_pass='{{ <variable_in_vault_file> }}'
