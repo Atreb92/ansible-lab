@@ -19,6 +19,9 @@ apt_software:
   - i3status
   - rofi
   - zsh
+  - zsh-syntax-highlighting
+  - zsh-autosuggestions
+  - zsh-common
   - gocryptfs
   - apktool
   - apksigner
@@ -27,6 +30,7 @@ apt_software:
   - mitmproxy
   - jq
   - feh
+  # - spice-vdagent
 
 flatpak_software:
   - {"name": "postman", "flatpak": "com.getpostman.Postman"}
