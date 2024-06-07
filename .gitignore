@@ -2,3 +2,4 @@ inventory
 .becomepass
 .vaultpass
 roles-old/*
+.python-version

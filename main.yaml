@@ -7,6 +7,7 @@
   roles:
     - role: software-install
     - role: software-config
+    #- role: vmguest-spice
     #- role: kali-burpsuite
     #- role: kali-pulsevpn
     #- role: kali-certificate 

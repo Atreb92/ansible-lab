@@ -6,7 +6,6 @@ apt_software:
   - tldr
   - neovim
   - vim
-  - kitty
   - terminator
   - seclists
   - nala
@@ -30,7 +29,6 @@ apt_software:
   - mitmproxy
   - jq
   - feh
-  # - spice-vdagent
 
 flatpak_software:
   - {"name": "postman", "flatpak": "com.getpostman.Postman"}
@@ -59,3 +57,4 @@ firefox_plugins:
 
 firefox_bookmarks:
   - {"title": "Shell Generator", "url": "https://www.revshells.com/", "placement": "toolbar", "folder": "Tools"}
+  - {"title": "cyber Chef", "url": "https://gchq.github.io/CyberChef/", "placement": "toolbar", "folder": "Tools"}

@@ -1,0 +1,36 @@
+- name: installing spice guest tools
+  become: true
+  apt:
+    state: present
+    update_cache: true
+    name: spice-vdagent
+
+- name: enabling spice services
+  become: true
+  systemd_service:
+    enabled: true
+    state: started
+    name: "{{ item }}"
+  with_items:
+    - spice-vdagent.service
+    - spice-vdagentd.service
+
+- name: Creating udev rule to fix screenresize on MATE and XFCE4
+  become: true
+  copy:
+    dest: /etc/udev/rules.d/50-x-resize.rules
+    content: |
+      ACTION=="change",KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/usr/local/bin/x-resize"
+
+- name: Creating resize script
+  become: true
+  copy:
+    dest: /usr/local/bin/x-resize
+    mode: 0755
+    content: |
+      #! /bin/sh 
+      PATH=/usr/bin
+      desktopuser=$(/bin/ps -ef  | /bin/grep -oP '^\w+ (?=.*vdagent( |$))') || exit 0
+      export DISPLAY=:0
+      export XAUTHORITY=$(eval echo "~$desktopuser")/.Xauthority
+      xrandr --output $(xrandr | awk '/ connected/{print $1; exit; }') --auto
