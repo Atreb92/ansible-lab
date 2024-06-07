@@ -1,0 +1,29 @@
+- name: Check if pyenv folder exists
+  stat:
+    path: "/home/{{ ansible_user_id }}/.pyenv"
+  register: pyenv_dir_results
+
+- name: Installing pyenv
+  block:
+    - name: fetching pyenv install script
+      get_url:
+        url: https://pyenv.run
+        dest: /tmp/pyenv.sh
+        mode: '0755'
+
+    - name: Executing pyenv install script
+      shell: /tmp/pyenv.sh
+
+    - name: Removing pyenv install script
+      file:
+        path: /tmp/pyenv.sh
+        state: absent
+  
+    - name: Installing pyenv requirements for compiling versions
+      become: true
+      apt:
+        state: present
+        update_cache: true
+        name: "{{ pyenv_apt_software }}"
+
+  when: not pyenv_dir_results.stat.exists
